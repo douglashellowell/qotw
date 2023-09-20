@@ -23,9 +23,8 @@ on:
     branches: 
       - 'main'
     paths:
-      - 'QOTW'
+      - 'QOTW/**/*'
     
-
 env:
   AZURE_FUNCTIONAPP_NAME: 'func-app-questions'   # set this to your function app name on Azure
   AZURE_FUNCTIONAPP_PACKAGE_PATH: 'QOTW'       # set this to the path to your function app project, defaults to the repository root
@@ -33,7 +32,7 @@ env:
 
 jobs:
   build-and-deploy:
-    runs-on: windows-latest # For Linux, use ubuntu-latest
+    runs-on: ubuntu-latest # For Linux, use ubuntu-latest
     environment: dev
     steps:
     - name: 'Checkout GitHub Action'
