@@ -36,7 +36,7 @@ public class Questions
         {
             return req.CreateResponse(HttpStatusCode.BadRequest);
         }
-    
+
         try
         {
             content.CreatedDate = DateTime.Now;
@@ -46,20 +46,13 @@ public class Questions
                 _questions.InsertOne(content);
                 return req.CreateResponse(HttpStatusCode.OK);
             }
-            else {
-               return req.CreateResponse(HttpStatusCode.Conflict);
-            }
 
+            return req.CreateResponse(HttpStatusCode.Conflict);
         }
         catch (Exception e)
         {
             return req.CreateResponse(HttpStatusCode.InternalServerError);
         }
-
-        var response = req.CreateResponse(HttpStatusCode.OK);
-
-        await response.WriteAsJsonAsync(content);
-        return response;
     }
 
     [Function(nameof(GetQuestions))]
@@ -82,7 +75,7 @@ public class Questions
             return req.CreateResponse(HttpStatusCode.InternalServerError);
         }
     }
-    
+
     [Function(nameof(GetCurrentQuestion))]
     public async Task<HttpResponseData> GetCurrentQuestion(
         [HttpTrigger(AuthorizationLevel.Anonymous, "get", Route = "question/current")]

@@ -3,6 +3,7 @@
 	import type { Sticker, Response, Question, Vote } from '../types';
 	import ControlBar from '../components/ControlBar.svelte';
 	import StickyNote from '../components/StickyNote.svelte';
+	import { css } from '@emotion/css';
 	import Header from './Header.svelte';
 
 	function chooseVote(sticker: Sticker) {
@@ -62,6 +63,11 @@
 	let votes: Vote[][] = [];
 	$: console.log('page', votes);
 
+	const questionStyle = css`
+		font-family: Caveat, cursive;
+		font-size: 1.75rem;
+	`;
+
 	onMount(async () => {
 		const q = await fetch('http://localhost:7071/api/question/current', {
 			method: 'GET'
@@ -87,7 +93,7 @@
 	<main class="whiteboard">
 		<!-- <button><img src="pen."</button> -->
 		{#if question && responses}
-			<p>{question.Question}</p>
+			<p class={questionStyle}>{question.Question}</p>
 			{#each responses as response, index}
 				<div on:click={() => selectSticky(index)}>
 					<StickyNote
@@ -98,7 +104,7 @@
 				</div>
 			{/each}
 		{:else}
-			<p>loading.....</p>
+			<p class={questionStyle}>loading.....</p>
 		{/if}
 	</main>
 	<ControlBar {chooseVote} isOpen={selectedStickyNoteIndex !== undefined} />
