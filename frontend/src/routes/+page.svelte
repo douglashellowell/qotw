@@ -1,5 +1,6 @@
 <script lang="ts">
-	import type { Sticker } from '../types';
+	import { onMount } from 'svelte';
+	import type { Sticker, Response, Question } from '../types';
 	import ControlBar from '../components/ControlBar.svelte';
 	import StickyNote from '../components/StickyNote.svelte';
 	import Header from './Header.svelte';
@@ -9,6 +10,19 @@
 	}
 
 	let selectedStickyNote: StickyNote;
+	let question: Question;
+	let responses: Response[];
+	onMount(async () => {
+		const q = await fetch('http://localhost:7071/api/question/current', {
+			method: 'GET'
+		});
+		question = await q.json();
+
+		const r = await fetch('http://localhost:7071/api/responses/' + question.Id, {
+			method: 'GET'
+		});
+		responses = await r.json();
+	});
 </script>
 
 <svelte:head>
@@ -21,10 +35,14 @@
 		<Header />
 	</div>
 	<main class="whiteboard">
-		<StickyNote content="hello" votes={[{ sticker: 'elephant', amount: 80 }]} />
-		<StickyNote content="hello" />
-		<StickyNote content="hello" />
-		<StickyNote content="hello" />
+		{#if question && responses}
+			<p>{question.Question}</p>
+			{#each responses as response}
+				<StickyNote content={response.Answer} submittedBy={response.SubmittedBy} />
+			{/each}
+		{:else}
+			<p>loading.....</p>
+		{/if}
 	</main>
 	<ControlBar {chooseVote} isOpen={selectedStickyNote !== undefined} />
 </div>

@@ -40,10 +40,10 @@ public class Questions
         try
         {
             content.CreatedDate = DateTime.Now;
-            var recordExists = await _posts.FindAsync(x => x.StartDate == content.StartDate).ToList();
-            if (!recordExists.length > 0)
+            var recordExists = await _questions.FindAsync(x => x.StartDate == content.StartDate);
+            if (recordExists.ToList().Count == 0)
             {
-                _posts.InsertOne(content);
+                _questions.InsertOne(content);
                 return req.CreateResponse(HttpStatusCode.OK);
             }
             else {
@@ -85,7 +85,7 @@ public class Questions
     
     [Function(nameof(GetCurrentQuestion))]
     public async Task<HttpResponseData> GetCurrentQuestion(
-        [HttpTrigger(AuthorizationLevel.Anonymous, "get", Route = "getcurrentquestion")]
+        [HttpTrigger(AuthorizationLevel.Anonymous, "get", Route = "question/current")]
         HttpRequestData req)
     {
         _logger.LogInformation("C# HTTP trigger function processed a request.");
@@ -95,12 +95,12 @@ public class Questions
             var comments = await _questions.FindAsync(c => c.EndDate > DateTime.Now && c.StartDate < DateTime.Now);
             var response = req.CreateResponse(HttpStatusCode.OK);
 
-            await response.WriteAsJsonAsync(comments.ToList());
+            await response.WriteAsJsonAsync(comments.First());
             return response;
         }
         catch (Exception e)
         {
-            return req.CreateResponse(HttpStatusCode.HttpStatusCode);
+            return req.CreateResponse(HttpStatusCode.InternalServerError);
         }
     }
 }

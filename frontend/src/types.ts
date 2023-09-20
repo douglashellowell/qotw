@@ -17,3 +17,19 @@ export type Vote = {
 	sticker: Sticker;
 	amount: number;
 };
+
+export type Question = {
+	Id: string;
+	Question: string;
+	StartDate: Date;
+	EndDate: Date;
+	CreatedDate: Date;
+};
+
+export type Response = {
+	Id: string;
+	QuestionId: string;
+	SubmittedBy: string;
+	Answer: string;
+	CreatedDate: Date;
+};
