@@ -34,7 +34,16 @@
 		selectedStickyNoteIndex = index;
 	}
 
-	function submitResponse(username: string, answer: string) {}
+	async function  submitResponse(username: string, answer: string) {
+		const q = await fetch('http://localhost:7071/api/addresponse', {
+			method: 'POST',
+			body: JSON.stringify({
+				QuestionId: question.Id,
+				SubmittedBy: username,
+				Answer: answer
+			})
+		});
+	}
 
 	let selectedStickyNoteIndex: number;
 
@@ -48,20 +57,7 @@
 	};
 
 	let responses: Response[] = [
-		{
-			Answer: 'sunbatinhg!',
-			Id: '',
-			QuestionId: '',
-			SubmittedBy: 'Doug',
-			CreatedDate: new Date()
-		},
-		{
-			Answer: 'eating!!',
-			Id: '',
-			QuestionId: '',
-			SubmittedBy: 'PJ',
-			CreatedDate: new Date()
-		}
+		
 	];
 	let votes: Vote[][] = [];
 
@@ -102,15 +98,16 @@
 		<div class="wrapper">
 			<button class="post" on:click={toggleForm}><img src="pen.png" /></button>
 			{#if question && responses}
-				{#each responses as response, index}
-					<div on:click={() => selectSticky(index)}>
-						<StickyNote
-							content={response.Answer}
-							submittedBy={response.SubmittedBy}
-							votes={votes[index]}
-						/>
-					</div>
-				{/each}
+				<div class="stickys">				{#each responses as response, index}
+						<div on:click={() => selectSticky(index)}>
+							<StickyNote
+								content={response.Answer}
+								submittedBy={response.SubmittedBy}
+								votes={votes[index]}
+							/>
+						</div>
+					{/each}
+				</div>
 			{:else}
 				<p class={questionStyle}>loading.....</p>
 			{/if}
@@ -149,5 +146,10 @@
 	}
 	.wrapper {
 		display: flex;
+	}
+
+	.stickys {
+		display: flex;
+		flex-wrap: wrap;
 	}
 </style>
