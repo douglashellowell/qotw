@@ -1,5 +1,6 @@
 <script lang="ts">
 	import { css } from '@emotion/css';
+
 	import { darken, desaturate, opacify, transparentize } from 'polished';
 	import type { Vote } from '../types';
 	export let content: string;
@@ -33,7 +34,11 @@
 	<p class="content">{content}</p>
 	<p class="submitted-by">{submittedBy}</p>
 	{#each votes as vote}
-		<img src={`icon-${vote.sticker}.png`} alt={vote.sticker} />
+		<img
+			src={`icon-${vote.sticker}.png`}
+			alt={vote.sticker}
+			style={`height: ${vote.amount * 3}px; width: ${vote.amount * 3}px;`}
+		/>
 	{/each}
 </div>
 
