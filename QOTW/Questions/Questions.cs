@@ -9,7 +9,7 @@ namespace Questions;
 public static class Questions
 {
     [Function("Questions")]
-    public static HttpResponseData Run([HttpTrigger(AuthorizationLevel.Function, "get", "post")] HttpRequestData req,
+    public static HttpResponseData Run([HttpTrigger(AuthorizationLevel.Anonymous, "get", "post")] HttpRequestData req,
         FunctionContext executionContext)
     {
         var logger = executionContext.GetLogger("Questions");
