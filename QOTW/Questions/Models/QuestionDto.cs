@@ -7,7 +7,7 @@ public class QuestionDto
 {
     [BsonId]
     [BsonRepresentation(BsonType.ObjectId)]
-    public ObjectId Id { get; set; }
+    public string Id { get; set; }
 
     [BsonElement("question")] 
     public string Question { get; set; }
@@ -20,4 +20,7 @@ public class QuestionDto
     
     [BsonElement("createdDate")]
     public DateTime? CreatedDate { get; set; }
+    
+    [BsonElement("responses")]
+    public List<ResponseDto>? Responses { get; set; }
 }
