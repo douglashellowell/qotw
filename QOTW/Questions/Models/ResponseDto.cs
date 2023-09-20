@@ -12,11 +12,11 @@ public class ResponseDto
     [BsonElement("questionId")]
     public string QuestionId { get; set; }
     
-    [BsonElement("name")]
-    public string Name { get; set; }
+    [BsonElement("submitted_by")]
+    public string SubmittedBy { get; set; }
     
-    [BsonElement("response")] 
-    public string response { get; set; }
+    [BsonElement("answer")] 
+    public string Answer { get; set; }
     
     [BsonElement("createdDate")]
     public DateTime? CreatedDate { get; set; }
