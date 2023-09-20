@@ -1,5 +1,6 @@
 <script lang="ts">
 	import { css } from '@emotion/css';
+
 	import { darken, desaturate, opacify, transparentize } from 'polished';
 	import type { Vote } from '../types';
 	export let content: string;

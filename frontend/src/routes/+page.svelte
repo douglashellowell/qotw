@@ -12,6 +12,7 @@
 	let selectedStickyNote: StickyNote;
 	let question: Question;
 	let responses: Response[];
+
 	onMount(async () => {
 		const q = await fetch('http://localhost:7071/api/question/current', {
 			method: 'GET'
