@@ -41,12 +41,13 @@ public class Questions
         {
             content.CreatedDate = DateTime.Now;
             var recordExists = await _posts.FindAsync(x => x.StartDate == content.StartDate).ToList();
-            if (!recordExists.Any())
+            if (!recordExists.length > 0)
             {
                 _posts.InsertOne(content);
+                return req.CreateResponse(HttpStatusCode.OK);
             }
             else {
-                req.CreateResponse(HttpStatusCode.Conflict);
+               return req.CreateResponse(HttpStatusCode.Conflict);
             }
 
         }
