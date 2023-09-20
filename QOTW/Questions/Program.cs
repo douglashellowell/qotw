@@ -9,7 +9,7 @@ var host = new HostBuilder()
         services.AddSingleton(s =>
         {
             // TODO: Replace with env connectionstring
-            var client = new MongoClient("mongodb://localhost:27017");
+            var client = new MongoClient(Environment.GetEnvironmentVariable("ConnectionString"));
             return client;
         });
     })
