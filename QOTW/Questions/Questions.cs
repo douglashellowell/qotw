@@ -40,7 +40,16 @@ public class Questions
         try
         {
             content.CreatedDate = DateTime.Now;
-            _questions.InsertOne(content);
+            var recordExists = await _posts.FindAsync(x => x.StartDate == content.StartDate).ToList();
+            if (!recordExists.length > 0)
+            {
+                _posts.InsertOne(content);
+                return req.CreateResponse(HttpStatusCode.OK);
+            }
+            else {
+               return req.CreateResponse(HttpStatusCode.Conflict);
+            }
+
         }
         catch (Exception e)
         {
@@ -91,7 +100,7 @@ public class Questions
         }
         catch (Exception e)
         {
-            return req.CreateResponse(HttpStatusCode.InternalServerError);
+            return req.CreateResponse(HttpStatusCode.HttpStatusCode);
         }
     }
 }
