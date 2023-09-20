@@ -1,6 +1,14 @@
-<script>
+<script lang="ts">
+	import type { Sticker } from '../types';
+	import ControlBar from '../components/ControlBar.svelte';
 	import StickyNote from '../components/StickyNote.svelte';
 	import Header from './Header.svelte';
+
+	function chooseVote(sticker: Sticker) {
+		console.log(sticker);
+	}
+
+	let selectedStickyNote: StickyNote;
 </script>
 
 <svelte:head>
@@ -13,11 +21,12 @@
 		<Header />
 	</div>
 	<main class="whiteboard">
-		<StickyNote content="hello" />
+		<StickyNote content="hello" votes={[{ sticker: 'elephant', amount: 80 }]} />
 		<StickyNote content="hello" />
 		<StickyNote content="hello" />
 		<StickyNote content="hello" />
 	</main>
+	<ControlBar {chooseVote} isOpen={selectedStickyNote !== undefined} />
 </div>
 
 <style>
