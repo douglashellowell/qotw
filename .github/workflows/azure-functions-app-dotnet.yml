@@ -20,7 +20,11 @@ name: Deploy DotNet project to Azure Function App
 
 on:
   push:
-    branches: ["main"]
+    branches: 
+      - 'main'
+    paths:
+      - 'QOTW'
+    
 
 env:
   AZURE_FUNCTIONAPP_NAME: 'func-app-questions'   # set this to your function app name on Azure
