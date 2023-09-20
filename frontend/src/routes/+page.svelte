@@ -5,6 +5,7 @@
 	import StickyNote from '../components/StickyNote.svelte';
 	import { css } from '@emotion/css';
 	import Header from './Header.svelte';
+	import Form from '../components/Form.svelte';
 
 	function chooseVote(sticker: Sticker) {
 		console.log('choosing', sticker);
@@ -32,6 +33,8 @@
 	function selectSticky(index: number) {
 		selectedStickyNoteIndex = index;
 	}
+
+	function submitResponse(username: string, answer: string) {}
 
 	let selectedStickyNoteIndex: number;
 
@@ -61,7 +64,11 @@
 		}
 	];
 	let votes: Vote[][] = [];
-	$: console.log('page', votes);
+
+	let showForm = false;
+	function toggleForm() {
+		showForm = !showForm;
+	}
 
 	const questionStyle = css`
 		font-family: Caveat, cursive;
@@ -91,26 +98,39 @@
 		<Header />
 	</div>
 	<main class="whiteboard">
-		<!-- <button><img src="pen."</button> -->
-		{#if question && responses}
-			<p class={questionStyle}>{question.Question}</p>
-			{#each responses as response, index}
-				<div on:click={() => selectSticky(index)}>
-					<StickyNote
-						content={response.Answer}
-						submittedBy={response.SubmittedBy}
-						votes={votes[index]}
-					/>
-				</div>
-			{/each}
-		{:else}
-			<p class={questionStyle}>loading.....</p>
+		<p class={questionStyle}>{question.Question}</p>
+		<div class="wrapper">
+			<button class="post" on:click={toggleForm}><img src="pen.png" /></button>
+			{#if question && responses}
+				{#each responses as response, index}
+					<div on:click={() => selectSticky(index)}>
+						<StickyNote
+							content={response.Answer}
+							submittedBy={response.SubmittedBy}
+							votes={votes[index]}
+						/>
+					</div>
+				{/each}
+			{:else}
+				<p class={questionStyle}>loading.....</p>
+			{/if}
+		</div>
+
+		{#if showForm}
+			<div>
+				<Form submit={submitResponse} />
+			</div>
 		{/if}
 	</main>
 	<ControlBar {chooseVote} isOpen={selectedStickyNoteIndex !== undefined} />
 </div>
 
 <style>
+	.post {
+		background: none;
+		border: none;
+		cursor: pointer;
+	}
 	.app {
 		height: 100vh;
 	}
@@ -126,5 +146,8 @@
 
 	.sidebar {
 		background: #232426;
+	}
+	.wrapper {
+		display: flex;
 	}
 </style>
