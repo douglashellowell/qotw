@@ -13,7 +13,7 @@ public class Questions
     private readonly MongoClient _mongoClient;
     private readonly ILogger _logger;
 
-    private readonly IMongoCollection<QuestionDto> _posts;
+    private readonly IMongoCollection<QuestionDto> _questions;
 
     public Questions(ILoggerFactory loggerFactory, MongoClient mongoClient)
     {
@@ -21,7 +21,7 @@ public class Questions
         _logger = loggerFactory.CreateLogger<Questions>();
 
         var database = _mongoClient.GetDatabase("qotw");
-        _posts = database.GetCollection<QuestionDto>("questions");
+        _questions = database.GetCollection<QuestionDto>("questions");
     }
 
     [Function(nameof(AddQuestion))]
@@ -70,7 +70,7 @@ public class Questions
 
         try
         {
-            var comments = await _posts.FindAsync(c => true);
+            var comments = await _questions.FindAsync(c => true);
             var response = req.CreateResponse(HttpStatusCode.OK);
 
             await response.WriteAsJsonAsync(comments.ToList());
@@ -91,7 +91,7 @@ public class Questions
 
         try
         {
-            var comments = await _posts.FindAsync(c => c.EndDate > DateTime.Now && c.StartDate < DateTime.Now);
+            var comments = await _questions.FindAsync(c => c.EndDate > DateTime.Now && c.StartDate < DateTime.Now);
             var response = req.CreateResponse(HttpStatusCode.OK);
 
             await response.WriteAsJsonAsync(comments.ToList());
