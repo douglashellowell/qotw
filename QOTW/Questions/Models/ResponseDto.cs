@@ -5,7 +5,11 @@ namespace Questions.Models;
 
 public class ResponseDto
 {
-    [BsonIgnore]
+    [BsonId]
+    [BsonRepresentation(BsonType.ObjectId)]
+    public string Id { get; set; }
+    
+    [BsonElement("questionId")]
     public string QuestionId { get; set; }
     
     [BsonElement("name")]

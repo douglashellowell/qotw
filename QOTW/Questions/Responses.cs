@@ -14,6 +14,7 @@ public class Responses
     private readonly ILogger _logger;
 
     private readonly IMongoCollection<QuestionDto> _questions;
+    private readonly IMongoCollection<ResponseDto> _responses;
 
     public Responses(ILoggerFactory loggerFactory, MongoClient mongoClient)
     {
@@ -22,7 +23,9 @@ public class Responses
 
         var database = _mongoClient.GetDatabase("qotw");
         _questions= database.GetCollection<QuestionDto>("questions");
+        _responses= database.GetCollection<ResponseDto>("responses");
     }
+   
     [Function(nameof(AddResponse))]
     public async Task<HttpResponseData> AddResponse([HttpTrigger(AuthorizationLevel.Anonymous, 
             "post",
@@ -34,13 +37,15 @@ public class Responses
         logger.LogInformation("C# HTTP trigger function processed a request.");
 
         var content = await req.ReadFromJsonAsync<ResponseDto>();
+        if (content is null)
+        {
+            return req.CreateResponse(HttpStatusCode.BadRequest);
+        }
+        
         try
         {
             content.CreatedDate = DateTime.Now;
-            _questions.UpdateOne(
-                x => x.Id == content.QuestionId, 
-                Builders<QuestionDto>.Update.Push(x => x.Responses, content)
-                );
+            _responses.InsertOne(content);
         }
         catch (Exception e)
         {
@@ -54,5 +59,30 @@ public class Responses
 
         return response;
         
+    }
+    
+    [Function(nameof(GetResponses))]
+    public async Task<HttpResponseData> GetResponses(
+
+
+        [HttpTrigger(AuthorizationLevel.Anonymous, "get", Route = "responses/{questionId}")] 
+        HttpRequestData req,
+        string questionId
+        )
+    {
+        try
+        {
+           var responses = _responses.Aggregate().Match(
+                x => x.QuestionId == questionId)
+                .ToList();
+            var response = req.CreateResponse(HttpStatusCode.OK);
+
+            await response.WriteAsJsonAsync(responses);
+            return response;
+        }
+        catch (Exception e)
+        {
+            return req.CreateResponse(HttpStatusCode.InternalServerError);
+        }
     }
 }
