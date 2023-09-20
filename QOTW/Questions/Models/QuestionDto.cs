@@ -20,7 +20,4 @@ public class QuestionDto
     
     [BsonElement("createdDate")]
     public DateTime? CreatedDate { get; set; }
-    
-    [BsonElement("responses")]
-    public List<ResponseDto>? Responses { get; set; }
 }
