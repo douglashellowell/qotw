@@ -85,6 +85,7 @@
 		<Header />
 	</div>
 	<main class="whiteboard">
+		<!-- <button><img src="pen."</button> -->
 		{#if question && responses}
 			<p>{question.Question}</p>
 			{#each responses as response, index}
