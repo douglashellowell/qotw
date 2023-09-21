@@ -6,6 +6,7 @@ declare global {
 		// interface Locals {}
 		// interface PageData {}
 		// interface Platform {}
+		/// <reference types="svelte-adapter-azure-swa" />
 	}
 }
 
